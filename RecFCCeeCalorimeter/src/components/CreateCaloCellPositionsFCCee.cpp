@@ -31,13 +31,13 @@ CreateCaloCellPositionsFCCee::CreateCaloCellPositionsFCCee(const std::string& na
 StatusCode CreateCaloCellPositionsFCCee::initialize() {
   StatusCode sc = GaudiAlgorithm::initialize();
   if (sc.isFailure()) return sc;
+  info() << "In CreateCaloCellPositionsFCCee" << endmsg;
   StatusCode sc_dataSvc = m_eventDataSvc.retrieve();
   m_podioDataSvc = dynamic_cast<PodioDataSvc*>(m_eventDataSvc.get());
   if (sc_dataSvc == StatusCode::FAILURE) {
     error() << "Error retrieving Event Data Service" << endmsg;
     return sc_dataSvc;
   }
-
   if (!m_cellPositionsECalBarrelTool) {
     error() << "CellPositionsTool for ECal Barrel is missing!" << endmsg;
     return StatusCode::FAILURE;
@@ -87,7 +87,7 @@ StatusCode CreateCaloCellPositionsFCCee::execute() {
       // identify calo system
       auto systemId = m_decoder->get(cellId, m_system_id);
       dd4hep::Position posCell;
-
+     
       if (systemId == m_systemIdECalBarrel) {  // ECAL BARREL system id
         posCell = m_cellPositionsECalBarrelTool->xyzPosition(cellId);
       } else if (systemId == m_systemIdHCalBarrel) {  // HCAL BARREL system id
